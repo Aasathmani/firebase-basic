@@ -11,6 +11,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool loader = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,23 +60,32 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
             SizedBox(height: 30),
-            InkWell(
-              onTap: () {
-                AuthServices.signInMethod(
-                  emailController.text,
-                  passwordController.text,
-                );
-              },
-              child: Container(
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Center(child: Text("Sign Up")),
-              ),
-            ),
+            loader
+                ? CircularProgressIndicator()
+                : InkWell(
+                    onTap: () async {
+                      setState(() {
+                        loader = true;
+                      });
+                      await AuthServices.signInMethod(
+                        emailController.text,
+                        passwordController.text,
+                        context,
+                      );
+                      setState(() {
+                        loader = false;
+                      });
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Center(child: Text("Sign Up")),
+                    ),
+                  ),
           ],
         ),
       ),

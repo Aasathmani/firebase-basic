@@ -12,6 +12,7 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool loader = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,21 +62,30 @@ class _SignInPageState extends State<SignInPage> {
             ),
             SizedBox(height: 30),
             InkWell(
-              onTap: () {
-                AuthServices.signUp(
+              onTap: () async {
+                setState(() {
+                  loader = true;
+                });
+                await AuthServices.signUp(
                   emailController.text,
                   passwordController.text,
+                  context,
                 );
+                setState(() {
+                  loader = false;
+                });
               },
-              child: Container(
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Center(child: Text("Sign in")),
-              ),
+              child: loader
+                  ? CircularProgressIndicator()
+                  : Container(
+                      width: double.infinity,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Center(child: Text("Sign in")),
+                    ),
             ),
           ],
         ),
