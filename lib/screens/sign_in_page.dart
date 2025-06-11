@@ -87,6 +87,21 @@ class _SignInPageState extends State<SignInPage> {
                       child: Center(child: Text("Sign in")),
                     ),
             ),
+            SizedBox(height: 20),
+            Container(
+              width: double.infinity,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: InkWell(
+                onTap: () async {
+                  await AuthServices.signInWithGoogle();
+                },
+              ),
+            ),
+
           ],
         ),
       ),
